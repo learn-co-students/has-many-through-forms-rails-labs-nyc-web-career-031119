@@ -1,6 +1,9 @@
 class PostsController < ApplicationController
   def show
     @post = Post.find(params[:id])
+    @comments = @post.comments
+    @comment = Comment.new
+    @users = @post.users.uniq
   end
 
   def index
@@ -16,9 +19,13 @@ class PostsController < ApplicationController
     redirect_to post
   end
 
+  def update
+    @post = Post.find(params[:id])
+    @post.update(post_params)
+  end
   private
 
   def post_params
-    params.require(:post).permit(:title, :content, category_ids:[], categories_attributes: [:name])
+    params.require(:post).permit(:title, :content, category_ids:[], categories_attributes: [:name], comment_attributes: [])
   end
 end
